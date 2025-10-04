@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Go Fresh — Organic & Fresh</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <!-- AOS (Animate On Scroll) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --green:#169953;
+      --green-2:#1fa05b;
+      --dark:#0b0b0b;
+      --muted:#6b6b6b;
+      --light:#f7fff7;
+      --card-shadow: 0 12px 40px rgba(10,10,10,0.06);
+      --glass: rgba(255,255,255,0.95);
+      --max-width:1200px;
+    }
+    *{box-sizing:border-box}
+    body{font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial; background:linear-gradient(180deg, #ffffff 0%, #f6fff9 100%); color:var(--dark); -webkit-font-smoothing:antialiased}
+    a{text-decoration:none}
+    .container-narrow{max-width:var(--max-width); margin:0 auto}
+
+    /* NAV */
+    .navbar-custom{background:transparent;}
+    .brand{font-weight:800; color:var(--green); font-size:1.45rem}
+    .nav-link{color:var(--dark)!important}
+    .lang-btn{border-radius:999px; padding:0.35rem 0.7rem; border:1px solid rgba(0,0,0,0.06); cursor:pointer; background:white}
+
+    /* HERO */
+    .hero{padding:6rem 1rem 4rem}
+    .hero-card{background:linear-gradient(180deg, rgba(22,153,83,0.06), rgba(31,160,91,0.02)); border-radius:18px; padding:2rem;}
+    .cta-btn{background:var(--green); color:white; border-radius:10px; padding:0.6rem 1.2rem; border:none}
+    .ghost-btn{background:transparent; border:1px solid rgba(11,11,11,0.06); border-radius:10px}
+
+    .hero-illustration{border-radius:18px; overflow:hidden; box-shadow:var(--card-shadow)}
+    .hero-illus-img{width:100%; height:100%; object-fit:cover; display:block}
+
+    /* SECTIONS */
+    .section-title{font-weight:700; color:var(--dark);}
+    .muted{color:var(--muted)}
+
+    /* CARDS */
+    .product-card{border-radius:12px; overflow:hidden; background:white; box-shadow:var(--card-shadow); transition:transform .25s}
+    .product-card:hover{transform:translateY(-6px)}
+    .product-card img{width:100%; height:180px; object-fit:cover}
+    .tag{background:rgba(31,160,91,0.12); color:var(--green); padding:0.25rem 0.6rem; border-radius:999px; font-weight:600; font-size:0.8rem}
+
+    .blog-card{border-radius:12px; padding:1rem; background:white; box-shadow:0 6px 18px rgba(10,10,10,0.04); transition:transform .25s}
+    .blog-card:hover{transform:translateY(-6px)}
+
+    /* footer */
+    footer{background:var(--dark); color:white; padding:2.2rem 1rem}
+
+    /* Forms */
+    .form-control:focus{box-shadow:none; border-color:var(--green)}
+
+    /* product modal image */
+    #productImg{border-radius:10px}
+
+    /* cart badge */
+    .cart-badge{background:var(--green); color:white; border-radius:999px; padding:0.15rem 0.45rem; font-weight:700}
+
+    /* small screens */
+    @media(max-width:767px){
+      .hero{padding:3.5rem 1rem}
+      .hero-card{padding:1rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom py-3 sticky-top">
+  <div class="container container-narrow d-flex align-items-center justify-content-between">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="#home">
+      <div class="brand">Go Fresh</div>
+      <small class="muted">Organic & Local</small>
+    </a>
+
+    <div class="d-flex align-items-center gap-2">
+      <div class="me-3 d-none d-lg-block">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="bn">বাংলা</button>
+      </div>
+      <button class="btn btn-outline-dark d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNav">
+        <i class="fa fa-bars"></i>
+      </button>
+
+      <div class="d-none d-lg-flex align-items-center gap-2">
+        <a class="nav-link" href="#home" data-i18n="home">Home</a>
+        <a class="nav-link" href="#about" data-i18n="about">About</a>
+        <a class="nav-link" href="#products" data-i18n="products">Products</a>
+        <a class="nav-link" href="#blogs" data-i18n="blogs">Blogs</a>
+        <a class="nav-link" href="#contact" data-i18n="contact">Contact</a>
+        <button class="btn btn-sm ms-2" id="loginBtn"><i class="fa fa-user"></i> <span data-i18n="login">Login</span></button>
+        <button class="btn btn-sm ms-2 ghost-btn" id="cartBtn" onclick="openCart()"><i class="fa fa-shopping-cart"></i> <span id="cartCount" class="cart-badge">0</span></button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Offcanvas mobile nav -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNav">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">Go Fresh</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="mb-3">
+      <button class="lang-btn me-2" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="bn">বাংলা</button>
+    </div>
+    <ul class="list-unstyled">
+      <li><a href="#home" class="d-block p-2" data-i18n="home">Home</a></li>
+      <li><a href="#about" class="d-block p-2" data-i18n="about">About</a></li>
+      <li><a href="#products" class="d-block p-2" data-i18n="products">Products</a></li>
+      <li><a href="#blogs" class="d-block p-2" data-i18n="blogs">Blogs</a></li>
+      <li><a href="#contact" class="d-block p-2" data-i18n="contact">Contact</a></li>
+      <li><a href="#" class="d-block p-2" id="mobileLoginBtn" data-i18n="login">Login</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- HERO -->
+<header id="home" class="hero">
+  <div class="container container-narrow">
+    <div class="row align-items-center hero-card">
+      <div class="col-lg-6" data-aos="fade-right">
+        <h1 class="section-title" data-i18n="hero_title">Fresh & Organic, Delivered</h1>
+        <p class="muted lead" data-i18n="hero_sub">From local farms to your table — clean, healthy and sustainable produce delivered weekly. Choose seasonal, support small farmers.</p>
+        <div class="d-flex gap-2 mt-3">
+          <button class="cta-btn" onclick="scrollToSection('products')" data-i18n="shop_now">Shop Now</button>
+          <button class="btn btn-outline-dark" onclick="openSignup()"><i class="fa fa-user-plus"></i> <span data-i18n="signup">Sign Up</span></button>
+        </div>
+
+        <div class="mt-4">
+          <small class="muted d-block" data-i18n="usp">Locally sourced · Pesticide-free · Climate-friendly</small>
+          <div class="d-flex gap-3 mt-3">
+            <div class="d-flex align-items-center gap-2"><i class="fa fa-leaf" style="color:var(--green)"></i><small class="muted">Farm-to-table</small></div>
+            <div class="d-flex align-items-center gap-2"><i class="fa fa-shield-alt" style="color:var(--green)"></i><small class="muted">Quality assured</small></div>
+            <div class="d-flex align-items-center gap-2"><i class="fa fa-truck" style="color:var(--green)"></i><small class="muted">Fast delivery</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6" data-aos="fade-left">
+        <div class="hero-illustration">
+          <picture>
+            <source media="(min-width: 992px)" srcset="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1400&auto=format&fit=crop&s=07f1b8a1e6">
+            <img class="hero-illus-img" src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=800&auto=format&fit=crop&s=07f1b8a1e6" alt="fresh farm produce">
+          </picture>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<section id="about" class="py-5">
+  <div class="container container-narrow">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-6" data-aos="fade-up">
+        <h2 class="section-title" data-i18n="about_title">About Go Fresh</h2>
+        <p class="muted">Go Fresh started as a weekend farmers' market in 2019. Today we partner with over 120 smallholder farms across the region to bring seasonal, pesticide-free produce directly to your doorstep. Our mission is to make healthy eating simple, affordable and sustainable.</p>
+
+        <h6 class="mt-3">What we believe</h6>
+        <ul class="muted">
+          <li>Transparent sourcing — we publish farm profiles and harvest dates.</li>
+          <li>Reduce waste — we package minimally and compost where possible.</li>
+          <li>Support local economies — most of our farmers are family-owned businesses.</li>
+        </ul>
+
+        <div class="mt-3">
+          <a href="#contact" class="btn btn-sm ghost-btn" data-i18n="contact">Get in touch</a>
+        </div>
+      </div>
+
+      <div class="col-lg-6" data-aos="fade-left">
+        <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=1200&auto=format&fit=crop&s=3b4a1a6a4f" alt="farm" style="width:100%; border-radius:12px; box-shadow:var(--card-shadow)">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="py-5 bg-transparent">
+  <div class="container container-narrow">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="section-title" data-i18n="products">Products</h3>
+      <div class="muted small" data-i18n="products_sub">Handpicked, seasonal & organics — delivered weekly</div>
+    </div>
+
+    <div class="row g-4 products-grid">
+      <!-- Product 1 -->
+      <div class="col-md-6 col-lg-4" data-aos="zoom-in">
+        <div class="card product-card h-100">
+          <img src="https://images.unsplash.com/photo-1543362906-acfc16c67564?q=80&w=1200&auto=format&fit=crop&s=acfc" alt="Salad Mix">
+          <div class="p-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="tag" data-i18n="organic">Organic</div>
+              <div class="muted">$4.00</div>
+            </div>
+            <h5 class="mt-2">Salad Mix</h5>
+            <p class="small muted">Fresh greens mixed by our farmers — baby spinach, arugula and lettuce. Perfect for daily salads.</p>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm cta-btn" onclick="openProductModal(1)">Buy</button>
+              <button class="btn btn-sm ghost-btn" onclick="addToCart(1)">Add to cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 2 -->
+      <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+        <div class="card product-card h-100">
+          <img src="https://images.unsplash.com/photo-1506806732259-39c2d0268443?q=80&w=1200&auto=format&fit=crop&s=2259" alt="Family Veg Box">
+          <div class="p-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="tag" data-i18n="local">Local</div>
+              <div class="muted">$6.50</div>
+            </div>
+            <h5 class="mt-2">Family Veg Box</h5>
+            <p class="small muted">A selection of seasonal vegetables — carrots, greens, eggplants and more. Designed for family meals.</p>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm cta-btn" onclick="openProductModal(2)">Buy</button>
+              <button class="btn btn-sm ghost-btn" onclick="addToCart(2)">Add to cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product 3 -->
+      <div class="col-md-6 col-lg-4" data-aos="zoom-in" data-aos-delay="200">
+        <div class="card product-card h-100">
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop&s=65947" alt="Fruit Pack">
+          <div class="p-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="tag" data-i18n="organic">Organic</div>
+              <div class="muted">$5.75</div>
+            </div>
+            <h5 class="mt-2">Fruit Pack</h5>
+            <p class="small muted">A curated pack of seasonal fruits — apples, oranges, and mangoes when in season.</p>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm cta-btn" onclick="openProductModal(3)">Buy</button>
+              <button class="btn btn-sm ghost-btn" onclick="addToCart(3)">Add to cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- BLOGS -->
+<section id="blogs" class="py-5">
+  <div class="container container-narrow">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h3 class="section-title" data-i18n="blogs">Blogs</h3>
+      <div class="muted small" data-i18n="blogs_sub">Healthy eating, farm stories, recipes and seasonal tips</div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4" data-aos="fade-up">
+        <article class="blog-card h-100">
+          <h5>Why Choose Organic Vegetables?</h5>
+          <p class="muted">Organic vegetables often contain fewer pesticide residues and may have higher levels of some antioxidants. Choosing organic supports soil health and biodiversity — read on to learn the top reasons to switch.</p>
+          <a href="#" class="small">Read more →</a>
+        </article>
+      </div>
+
+      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="100">
+        <article class="blog-card h-100">
+          <h5>Local Farms, Fresher Food</h5>
+          <p class="muted">Buying local reduces transport time which preserves nutrients and flavor. Meet a family farm we work with and see how produce gets from soil to box in 48 hours.</p>
+          <a href="#" class="small">Read more →</a>
+        </article>
+      </div>
+
+      <div class="col-md-6 col-lg-4" data-aos="fade-up" data-aos-delay="200">
+        <article class="blog-card h-100">
+          <h5>Simple Organic Recipes</h5>
+          <p class="muted">Quick recipe ideas using seasonal produce: roasted veg bowls, fresh fruit smoothies, and a simple herb dressing that lifts any salad.</p>
+          <a href="#" class="small">Read more →</a>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-5 bg-transparent">
+  <div class="container container-narrow">
+    <div class="row g-4">
+      <div class="col-lg-6" data-aos="fade-right">
+        <h3 class="section-title" data-i18n="contact_us">Contact Us</h3>
+        <p class="muted">Have a question about our boxes, want to stock our produce, or become a farm partner? Send a message and our team will respond within 48 hours.</p>
+
+        <form id="contactForm" class="mt-3">
+          <div class="mb-3">
+            <label class="form-label small" data-i18n="name">Name</label>
+            <input class="form-control" id="contactName" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small" data-i18n="email">Email</label>
+            <input class="form-control" type="email" id="contactEmail" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small" data-i18n="message">Message</label>
+            <textarea class="form-control" id="contactMessage" rows="4" required></textarea>
+          </div>
+          <button class="btn cta-btn" type="submit" data-i18n="send">Send Message</button>
+        </form>
+      </div>
+
+      <div class="col-lg-6" data-aos="fade-left">
+        <div class="p-4 product-card h-100">
+          <h5 data-i18n="visit">Visit Our Market</h5>
+          <p class="muted" data-i18n="visit_text">123 Green Lane, Local Town — Open Mon–Sat</p>
+          <div class="mt-3">
+            <iframe title="map" src="https://www.google.com/maps?q=green+farm&output=embed" style="width:100%; height:250px; border:0; border-radius:8px"></iframe>
+          </div>
+          <div class="mt-3 muted small">Phone: +60 12-345-6789 · Email: hello@gofresh.example</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container container-narrow d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+    <div>
+      <div class="brand">Go Fresh</div>
+      <small class="muted">Healthy food. Happy planet.</small>
+    </div>
+    <div class="d-flex gap-3 align-items-center">
+      <a href="#" class="text-white"><i class="fa-brands fa-facebook fa-lg"></i></a>
+      <a href="#" class="text-white"><i class="fa-brands fa-instagram fa-lg"></i></a>
+      <a href="#" class="text-white"><i class="fa-brands fa-twitter fa-lg"></i></a>
+    </div>
+  </div>
+</footer>
+
+<!-- LOGIN & SIGNUP MODALS -->
+<div class="modal fade" id="authModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="authTitle" data-i18n="login">Login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="authForm">
+          <div id="signupFields" style="display:none">
+            <div class="mb-3">
+              <label class="form-label small" data-i18n="name">Name</label>
+              <input class="form-control" id="suName">
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small" data-i18n="email">Email</label>
+            <input class="form-control" id="authEmail" type="email" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small" data-i18n="password">Password</label>
+            <input class="form-control" id="authPassword" type="password" required>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <input type="checkbox" id="rememberMe"> <label for="rememberMe" class="small" data-i18n="remember">Remember me</label>
+            </div>
+            <a href="#" class="small" data-i18n="forgot">Forgot?</a>
+          </div>
+          <div class="mt-3 d-flex gap-2">
+            <button class="btn cta-btn" type="submit" id="authSubmit" data-i18n="login">Login</button>
+            <button class="btn btn-outline-dark" type="button" onclick="toggleAuthMode()" id="toggleAuth">Sign Up</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal fade" id="productModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="productTitle">Product</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <img id="productImg" src="" alt="product" style="width:100%; border-radius:8px; object-fit:cover; height:320px">
+          </div>
+          <div class="col-md-6">
+            <h4 id="productName">Name</h4>
+            <div class="mb-2"><span id="productTag" class="tag">Organic</span> <strong id="productPrice" class="ms-2">$0.00</strong></div>
+            <p id="productDesc" class="muted">Description</p>
+            <div class="d-flex gap-2 mt-4">
+              <button class="btn cta-btn" onclick="addToCartModal()">Add to cart</button>
+              <button class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART OFFCANVAS -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartCanvas">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" data-i18n="cart">Your Cart</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body" id="cartBody">
+    <p class="muted">Cart is empty</p>
+  </div>
+  <div class="offcanvas-footer p-3">
+    <div class="d-flex justify-content-between align-items-center">
+      <strong>Total:</strong>
+      <strong id="cartTotal">$0.00</strong>
+    </div>
+    <div class="mt-3">
+      <button class="btn cta-btn w-100" onclick="checkout()" data-i18n="checkout">Checkout</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script>
+  AOS.init({duration:700, once:true});
+
+  // Translations
+  const i18n = {
+    en:{
+      home:'Home', about:'About', blogs:'Blogs', contact:'Contact', login:'Login', signup:'Sign Up', products:'Products', products_sub:'Handpicked, seasonal & organics', cart:'Your Cart', checkout:'Checkout',
+      hero_title:'Fresh & Organic, Delivered', hero_sub:'From local farms to your table — clean, healthy and sustainable produce delivered weekly. Choose seasonal, support small farmers.', shop_now:'Shop Now',
+      usp:'Locally sourced · Pesticide-free · Climate-friendly', organic:'Organic', local:'Local', story:'Our Story', story_blurb:'Small farms, big care. We partner directly with growers.',
+      about_title:'About Go Fresh', about_text:'Go Fresh is a community-driven marketplace for organic foods. We work with local farmers, follow sustainable practices, and prioritize freshness & transparency.',
+      about_li1:'Farm-to-table sourcing', about_li2:'No synthetic pesticides', about_li3:'Eco-friendly packaging',
+      blogs_sub:'Read about the benefits of organic foods', b1_title:'Why Choose Organic Vegetables?', b1_text:'Organic vegetables often contain fewer pesticides and more beneficial antioxidants. Supporting organic farming helps soil health and biodiversity.',
+      b2_title:'Local Farms, Fresher Food', b2_text:'Buying local reduces transport time — that means more nutrients and better taste. It also supports smallholder farmers in your community.',
+      b3_title:'How Organic Farming Benefits the Planet', b3_text:'Organic practices reduce chemical runoff, improve carbon sequestration in soils, and promote wildlife — contributing to climate resilience.',
+      read_more:'Read more →', contact_us:'Contact Us', contact_sub:'Have a question or want to stock our products? Send us a message.',
+      name:'Name', email:'Email', message:'Message', send:'Send Message', visit:'Visit Our Market', visit_text:'123 Green Lane, Local Town — Open Mon–Sat',
+      shop_now_short:'Shop Now', password:'Password', remember:'Remember me', forgot:'Forgot?', story_short:'Our Story'
+    },
+    bn:{
+      home:'হোম', about:'আমাদের সম্পর্কে', blogs:'ব্লগ', contact:'যোগাযোগ', login:'লগইন', signup:'সাইন আপ', products:'প্রোডাক্ট', products_sub:'হ্যান্ডপিকড, মৌসুমি ও জৈব', cart:'আপনার কার্ট', checkout:'চেকআউট',
+      hero_title:'তাজা ও জৈব, পৌঁছে যাচ্ছে আপনার কাছে', hero_sub:'স্থানীয় খামার থেকে আপনার টেবিলে — পরিচ্ছন্ন, স্বাস্থ্যকর এবং টেকসই পণ্য।', shop_now:'এখনই কেনা',
+      usp:'স্থানীয় উৎস · কীটনাশক-মুক্ত · পরিবেশ বান্ধব', organic:'জৈব', local:'স্থানীয়', story:'আমাদের গল্প', story_blurb:'ছোট খামার, বড় যত্ন। আমরা সরাসরি চাষিদের সাথে কাজ করি।',
+      about_title:'Go Fresh সম্পর্কে', about_text:'Go Fresh হল একটি কমিউনিটি-চালিত বাজার যাতে জৈব খাদ্য অন্তর্ভুক্ত। আমরা স্থানীয় কৃষকদের সাথে কাজ করি, টেকসই পদ্ধতি অনুসরণ করি এবং তাজা ও স্বচ্ছতাকে অগ্রাধিকার দিই।',
+      about_li1:'খামার-থেকে-টেবিল সরবরাহ', about_li2:'কোনো কৃত্রিম কীটনাশক নেই', about_li3:'পরিবেশবান্ধব প্যাকেজিং',
+      blogs_sub:'জৈব খাদ্যের উপকারিতা সম্পর্কে পড়ুন', b1_title:'কেন জৈব সবজি নির্বাচন করবেন?', b1_text:'জৈব সবজিতে সাধারণত কম কীটনাশক থাকে এবং বেশি অ্যান্টিঅক্সিডেন্ট থাকতে পারে। জৈব চাষ মাটির সুস্থতা এবং জীববৈচিত্র্যকে সমর্থন করে।',
+      b2_title:'স্থানীয় খামার, আরও তাজা খাবার', b2_text:'স্থানীয় কেনা পরিবহণের সময় কমায় — যার মানে পুষ্টি ও স্বাদের উন্নতি। এটি আপনার সম্প্রদায়ের ক্ষুদ্র কৃষকদেরও সমর্থন করে।',
+      b3_title:'জৈব চাষ দেখাশোনা করে গ্রহকেও সহায়তা করে', b3_text:'জৈব পদ্ধতি রাসায়নিক নিষ্কাশন কমায়, মাটিতে কার্বন সঞ্চয় উন্নত করে, এবং বন্যজীবনের প্রচার করে — যা জলবায়ু সহনশীলতায় সহায়ক।',
+      read_more:'আরও পড়ুন →', contact_us:'যোগাযোগ করুন', contact_sub:'কোন প্রশ্ন বা আমাদের পণ্য স্টক করতে চান? একটি বার্তা পাঠান।',
+      name:'নাম', email:'ইমেইল', message:'বার্তা', send:'বার্তা পাঠান', visit:'আমাদের বাজারে আসুন', visit_text:'১২৩ গ্রিন লেন, লোকাল টাউন — সোমবার–শনিবার খোলা',
+      shop_now_short:'এখনই কেনা', password:'পাসওয়ার্ড', remember:'আমাকে মনে রাখুন', forgot:'ভুলে গেছেন?', story_short:'আমাদের গল্প'
+    }
+  };
+
+  // Apply language
+  function applyLang(lang){
+    const dict = i18n[lang] || i18n.en;
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key = el.getAttribute('data-i18n');
+      if(dict[key]) el.textContent = dict[key];
+    });
+    // remember selection
+    localStorage.setItem('gf_lang', lang);
+  }
+
+  // Init language
+  document.querySelectorAll('.lang-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>applyLang(btn.dataset.lang));
+  });
+  const savedLang = localStorage.getItem('gf_lang') || 'en';
+  applyLang(savedLang);
+
+  // Smooth scroll
+  function scrollToSection(id){
+    document.getElementById(id).scrollIntoView({behavior:'smooth'});
+  }
+
+  // Auth modal handling
+  const authModal = new bootstrap.Modal(document.getElementById('authModal'));
+  document.getElementById('loginBtn').addEventListener('click', ()=>openLogin());
+  document.getElementById('mobileLoginBtn').addEventListener('click', ()=>openLogin());
+
+  function openLogin(){
+    document.getElementById('authTitle').textContent = i18n[localStorage.getItem('gf_lang') || 'en'].login;
+    document.getElementById('authSubmit').textContent = i18n[localStorage.getItem('gf_lang') || 'en'].login;
+    document.getElementById('signupFields').style.display='none';
+    authModal.show();
+  }
+  function openSignup(){
+    document.getElementById('authTitle').textContent = i18n[localStorage.getItem('gf_lang') || 'en'].signup;
+    document.getElementById('authSubmit').textContent = i18n[localStorage.getItem('gf_lang') || 'en'].signup;
+    document.getElementById('signupFields').style.display='block';
+    authModal.show();
+  }
+  function toggleAuthMode(){
+    const showingSignup = document.getElementById('signupFields').style.display !== 'none';
+    if(showingSignup){
+      document.getElementById('signupFields').style.display='none';
+      document.getElementById('authTitle').textContent = i18n[localStorage.getItem('gf_lang')||'en'].login;
+      document.getElementById('authSubmit').textContent = i18n[localStorage.getItem('gf_lang')||'en'].login;
+      document.getElementById('toggleAuth').textContent = i18n[localStorage.getItem('gf_lang')||'en'].signup;
+    } else {
+      document.getElementById('signupFields').style.display='block';
+      document.getElementById('authTitle').textContent = i18n[localStorage.getItem('gf_lang')||'en'].signup;
+      document.getElementById('authSubmit').textContent = i18n[localStorage.getItem('gf_lang')||'en'].signup;
+      document.getElementById('toggleAuth').textContent = i18n[localStorage.getItem('gf_lang')||'en'].login;
+    }
+  }
+
+  // Demo users stored in localStorage
+  document.getElementById('authForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const email = document.getElementById('authEmail').value.trim();
+    const pass = document.getElementById('authPassword').value.trim();
+    const isSignup = document.getElementById('signupFields').style.display !== 'none';
+    if(isSignup){
+      const name = document.getElementById('suName').value.trim();
+      const users = JSON.parse(localStorage.getItem('gf_users')||'{}');
+      if(users[email]){alert('User already exists'); return}
+      users[email] = {name, email};
+      localStorage.setItem('gf_users', JSON.stringify(users));
+      alert('Signed up! (demo)');
+      authModal.hide();
+    } else {
+      const users = JSON.parse(localStorage.getItem('gf_users')||'{}');
+      if(users[email]){ alert('Logged in (demo) — ' + (users[email].name||email)); authModal.hide(); }
+      else alert('User not found (demo) — please sign up');
+    }
+  });
+
+  // Contact form demo
+  document.getElementById('contactForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    alert('Thank you! Your message has been received. (Demo)');
+    this.reset();
+  });
+
+  // PRODUCTS DATA (demo)
+  const PRODUCTS = {
+    1:{id:1,name:'Salad Mix',price:4.00,tag:'organic',img:'https://images.unsplash.com/photo-1543362906-acfc16c67564?q=80&w=1200&auto=format&fit=crop&s=acfc',desc:'Fresh greens packed with nutrients — baby spinach, arugula and mixed lettuce.'},
+    2:{id:2,name:'Family Veg Box',price:6.50,tag:'local',img:'https://images.unsplash.com/photo-1506806732259-39c2d0268443?q=80&w=1200&auto=format&fit=crop&s=2259',desc:'A seasonal box of vegetables suitable for a family — carrots, leafy greens and more.'},
+    3:{id:3,name:'Fruit Pack',price:5.75,tag:'organic',img:'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop&s=65947',desc:'A curated selection of seasonal fruits — great for snacks and breakfasts.'}
+  };
+
+  // product modal
+  const productModal = new bootstrap.Modal(document.getElementById('productModal'));
+  function openProductModal(id){
+    const p = PRODUCTS[id];
+    if(!p) return;
+    document.getElementById('productTitle').textContent = p.name;
+    document.getElementById('productImg').src = p.img;
+    document.getElementById('productName').textContent = p.name;
+    document.getElementById('productPrice').textContent = '$' + p.price.toFixed(2);
+    document.getElementById('productDesc').textContent = p.desc;
+    document.getElementById('productTag').textContent = i18n[localStorage.getItem('gf_lang')||'en'][p.tag] || p.tag;
+    productModal.show();
+    currentModalProduct = id;
+  }
+
+  let currentModalProduct = null;
+
+  // CART (simple demo stored in localStorage)
+  function getCart(){ return JSON.parse(localStorage.getItem('gf_cart')||'[]'); }
+  function setCart(c){ localStorage.setItem('gf_cart', JSON.stringify(c)); updateCartUI(); }
+  function addToCart(id){ const cart = getCart(); cart.push(id); setCart(cart); alert('Added to cart (demo)'); }
+  function addToCartModal(){ if(currentModalProduct) addToCart(currentModalProduct); productModal.hide(); }
+
+  function updateCartUI(){
+    const cart = getCart();
+    document.getElementById('cartCount').textContent = cart.length;
+    const body = document.getElementById('cartBody');
+    if(cart.length===0){ body.innerHTML = '<p class="muted">Cart is empty</p>'; document.getElementById('cartTotal').textContent = '$0.00'; return }
+    // aggregate
+    const counts = {};
+    cart.forEach(id=> counts[id] = (counts[id]||0)+1);
+    let html = '<div class="list-group">';
+    let total = 0;
+    Object.keys(counts).forEach(k=>{
+      const p = PRODUCTS[k];
+      const qty = counts[k];
+      const line = p.price * qty; total += line;
+      html += `<div class="list-group-item d-flex justify-content-between align-items-center"><div><strong>${p.name}</strong><div class="small muted">${qty} × $${p.price.toFixed(2)}</div></div><div>$${line.toFixed(2)}</div></div>`;
+    });
+    html += '</div>';
+    body.innerHTML = html + '<div class="mt-3"><button class="btn btn-sm btn-outline-danger" onclick="clearCart()">Clear cart</button></div>';
+    document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+  }
+
+  function clearCart(){ localStorage.removeItem('gf_cart'); updateCartUI(); }
+
+  function openCart(){ const canvas = new bootstrap.Offcanvas(document.getElementById('cartCanvas')); canvas.show(); }
+
+  function checkout(){ alert('Checkout is a demo — integrate payment gateway to process orders.'); }
+
+  // init cart ui
+  updateCartUI();
+
+  // Small accessibility: enable Enter to submit auth
+  document.getElementById('authForm').addEventListener('keydown', function(e){ if(e.key==='Enter'){} });
+
+</script>
+</body>
+</html>
